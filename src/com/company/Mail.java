@@ -1,10 +1,21 @@
 package com.company;
 
 public class Mail {
+    static int id=1;
+    int mailId;
     String fromMail;
     String toMail;
     String subject;
     String content;
+
+    public int getMailId() {
+        return mailId;
+    }
+
+    public Mail(){
+        this.mailId=id;
+        id+=1;
+    }
 
     public String getFromMail() {
         return fromMail;

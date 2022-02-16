@@ -21,6 +21,22 @@ public class Groups {
     public ArrayList<Users> getUsers() {
         return users;
     }
+    public void storeInbox(Users fromUser,String subject,String content){
+        Mail newMail = new Mail();
+        newMail.setFromMail(fromUser.userEmail);
+        newMail.setToMail(this.groupEmail);
+        newMail.setSubject(subject);
+        newMail.setContent(content);
+        this.inboxMail.add(newMail);
+        System.out.println("Mail sent successfully");
+    }
+    public void showInbox(){
+        System.out.println("Id\t\tFrom\t\tTo\t\tSubject\t\tContent");
+        for(Mail mail:this.inboxMail){
+            System.out.println(mail.getMailId()+"\t\t"+mail.getFromMail()+"\t"+mail.getToMail()+"\t"+mail.getSubject()+"\t"+
+                    mail.getContent());
+        }
+    }
 
     boolean isUserPresent(Users user){
         for(Users users: this.users){

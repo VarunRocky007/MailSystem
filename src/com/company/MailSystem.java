@@ -128,6 +128,54 @@ public class MailSystem {
             }
         }
     }
+    public static void print(String text){
+        System.out.println(text);
+    }
+    public static void sendMail(){
+        Scanner scan = new Scanner(System.in);
+        print("Enter the user mail:");
+        String userMail = scan.next();
+        Users user = null;
+        for(Users users:usersList){
+            if(users.getUserEmail().equals(userMail)){
+                user=users;
+            }
+        }
+        if(user==null){
+            print("User not found");
+        }
+        else{
+            print("Enter the password");
+            String pass = scan.next();
+            if(user.getUserPassword().equals(pass)){
+                print("Users present");
+                for (Users users:usersList){
+                    print(users.getUserEmail());
+                }
+                print("Enter the user email to send mail:");
+                String toUserMail = scan.next();
+                Users toUser = null;
+                for (Users users:usersList){
+                    if(users.getUserEmail().equals(toUserMail)){
+                        toUser = users;
+                    }
+                }
+                if(toUser==null){
+                    print("User not found try again...");
+                }
+                else{
+                    print("Enter the subject");
+                    String subject = scan.next();
+                    print("Enter the content");
+                    String content = scan.next();
+                    user.sendMail(toUser,subject,content);
+                }
+            }
+            else {
+                print("Pass doesn't match");
+            }
+        }
+    }
     public static void main(String[] args) {
         /**1.User~
          * 2.Group~
@@ -157,6 +205,7 @@ public class MailSystem {
                     addUserToGroup();
                     break;
                 case 4:
+                    sendMail();
                     break;
                 case 5:
                     break;
