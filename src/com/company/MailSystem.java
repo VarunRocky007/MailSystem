@@ -11,13 +11,13 @@ public class MailSystem {
         System.out.println("Enter new user email: ");
         String userEmail = scan.next();
         for(Users user : usersList){
-            if(user.getUserEmail().equals(userEmail)){
+            if(user.getEmail().equals(userEmail)){
                 System.out.println("User already exists");
                 canInsert = false;
             }
         }
         for(Groups group : groupsList){
-            if(group.getGroupEmail().equals(userEmail)){
+            if(group.getEmail().equals(userEmail)){
                 System.out.println("Group exists with this email");
                 canInsert = false;
             }
@@ -32,7 +32,7 @@ public class MailSystem {
             if(tempPass.equals(userPass)){
                 Users newUser = new Users();
                 newUser.setUserName(userName);
-                newUser.setUserEmail(userEmail);
+                newUser.setEmail(userEmail);
                 newUser.setUserPassword(userPass);
                 usersList.add(newUser);
                 System.out.println("User added successfully..");
@@ -49,13 +49,13 @@ public class MailSystem {
         System.out.println("Enter the email for group");
         String groupEmail = scan.next();
         for(Users users : usersList){
-            if(users.getUserEmail().equals(groupEmail)){
+            if(users.getEmail().equals(groupEmail)){
                 System.out.println("User already exists with this mail.");
                 canInsert = false;
             }
         }
         for(Groups group : groupsList){
-            if(group.getGroupEmail().equals(groupEmail)){
+            if(group.getEmail().equals(groupEmail)){
                 System.out.println("Group exists with this email");
                 canInsert = false;
             }
@@ -72,7 +72,7 @@ public class MailSystem {
                 System.out.println("Enter the group description:");
                 String groupDesc = scan.next();
                 newGroup.setGroupName(groupName);
-                newGroup.setGroupEmail(groupEmail);
+                newGroup.setEmail(groupEmail);
                 newGroup.setGroupPassword(groupPass);
                 newGroup.setGroupDescription(groupDesc);
                 groupsList.add(newGroup);
@@ -89,7 +89,7 @@ public class MailSystem {
         String groupMail = scan.next();
         Groups currentGroup = null;
         for(Groups group: groupsList){
-            if(group.getGroupEmail().equals(groupMail)){
+            if(group.getEmail().equals(groupMail)){
                 currentGroup = group;
             }
         }
@@ -102,17 +102,17 @@ public class MailSystem {
             if(currentGroup.getGroupPassword().equals(password)){
                 System.out.println("Users Present");
                 for(Users user:usersList){
-                    System.out.println(user.getUserName()+" : "+user.getUserEmail());
+                    System.out.println(user.getUserName()+" : "+user.getEmail());
                 }
                 System.out.println("Users Present in Group: "+currentGroup.getGroupName());
                 for(Users user:currentGroup.getUsers()){
-                    System.out.println(user.getUserName()+" : "+user.getUserEmail());
+                    System.out.println(user.getUserName()+" : "+user.getEmail());
                 }
                 System.out.println("Enter the user mail to add to this group");
                 String userMail = scan.next();
                 Users user = null;
                 for (Users users:usersList){
-                    if(users.getUserEmail().equals(userMail)){
+                    if(users.getEmail().equals(userMail)){
                         user=users;
                     }
                 }
@@ -137,7 +137,7 @@ public class MailSystem {
         String userMail = scan.next();
         Users user = null;
         for(Users users:usersList){
-            if(users.getUserEmail().equals(userMail)){
+            if(users.getEmail().equals(userMail)){
                 user=users;
             }
         }
@@ -148,19 +148,27 @@ public class MailSystem {
             print("Enter the password");
             String pass = scan.next();
             if(user.getUserPassword().equals(pass)){
-                print("Users present");
+                print("Emails present");
                 for (Users users:usersList){
-                    print(users.getUserEmail());
+                    print(users.getEmail());
+                }
+                for (Groups groups:groupsList){
+                    print(groups.email);
                 }
                 print("Enter the user email to send mail:");
                 String toUserMail = scan.next();
-                Users toUser = null;
+                Email toEmail = null;
                 for (Users users:usersList){
-                    if(users.getUserEmail().equals(toUserMail)){
-                        toUser = users;
+                    if(users.getEmail().equals(toUserMail)){
+                        toEmail = users;
                     }
                 }
-                if(toUser==null){
+                for (Groups groups:groupsList){
+                    if(groups.getEmail().equals(toUserMail)){
+                        toEmail = groups;
+                    }
+                }
+                if(toEmail==null){
                     print("User not found try again...");
                 }
                 else{
@@ -168,12 +176,44 @@ public class MailSystem {
                     String subject = scan.next();
                     print("Enter the content");
                     String content = scan.next();
-                    user.sendMail(toUser,subject,content);
+                    Mail newMail = new Mail();
+                    newMail.sendMail(user,toEmail,subject,content);
                 }
             }
             else {
                 print("Pass doesn't match");
             }
+        }
+    }
+    public static void inbox(){
+        print("Which inbox should be shown");
+        print("Users present");
+        for(Users users:usersList){
+            print(users.getEmail());
+        }
+        print("Groups present");
+        for(Groups groups:groupsList){
+            print(groups.getEmail());
+        }
+        Email email = null;
+        Mail mail = new Mail();
+        Scanner scanner = new Scanner(System.in);
+        String emailId = scanner.next();
+        for (Users users:usersList){
+            if(users.getEmail().equals(emailId)){
+                email=users;
+            }
+        }
+        for(Groups groups:groupsList){
+            if(groups.getEmail().equals(emailId)){
+                email=groups;
+            }
+        }
+        if(email==null){
+            print("Enter the valid email");
+        }
+        else {
+            mail.showInbox(email);
         }
     }
     public static void main(String[] args) {
@@ -208,6 +248,7 @@ public class MailSystem {
                     sendMail();
                     break;
                 case 5:
+                    inbox();
                     break;
                 case 6:
                     break;
